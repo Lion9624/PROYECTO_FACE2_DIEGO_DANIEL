@@ -7,14 +7,14 @@ import pyodbc as sql
 import smtplib
 import datetime
 from email.message import EmailMessage
-message='hola recibiste este correo ya que perteneces a la ciudad de medellin'
+message='hola recibiste este correo ya que perteneces a la ciudad de medellin y realizaste una compra en Face2'
 subject="Compra en Face2"
 message="subject : {}\n\n{}".format(subject,message)
 
 try:
-            conexion=sql.connect('DRIVER={SQL Server};SERVER=Dain;DATABASE=Fase2;Trusted_Connection=yes;')
+      conexion=sql.connect('DRIVER={SQL Server};SERVER=DIEGO123\SQLEXPRESS;DATABASE=Fase2;Trusted_Connection=yes;')
 except Exception as Ex:
-            print("Ocurrio un error al conectar a SQL : ",Ex)
+      print("Ocurrio un error al conectar a SQL : ",Ex)
     
       
 def visualizar_datos():
@@ -38,13 +38,11 @@ def insertar_datos():
             cedula= int(input("Ingrese la cédula del comprador: "))
             correo = input("Ingrese el correo electrónico del comprador: ")
             edad= int(input("Edad del comprador: "))
-            ciudad = input("Ingrese la ciudad en la que se realiza la compra: ").lower
+            ciudad = input("Ingrese la ciudad en la que se realiza la compra: ").lower()
             productos = int(input("Ingrese la cantidad de productos comprados: "))
-            fecha = datetime.date.today()
-            consulta = "Insert into Usuarios (nombre, cedula, correo, edad, ciudad, productos, fecha_de_compra) values ("+nombre+", "+cedula+","+correo+", "+edad+", "+ciudad+", "+productos+", "+fecha+")"
-            print(consulta)
-            # cursorInsert.execute(consulta)
-            # cursorInsert.commit()            
+            fecha = str(datetime.date.today())
+            cursor.execute("INSERT INTO Usuarios (nombre, cedula, correo, edad, ciudad, productos,fecha_de_compra) values (?,?,?,?,?,?,?)", (nombre,cedula,correo,edad,ciudad,productos,fecha))
+            cursor.commit()            
             cursor.close()
             if ciudad=="medellin":
                   server1=smtplib.SMTP('smtp.gmail.com','587')
